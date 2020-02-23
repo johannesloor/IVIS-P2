@@ -39,7 +39,7 @@
       }
       #xRadio {
         position: relative;
-        top: 230px;
+        top: 250px;
         font-size: 10pt;
         height: 100%;
       }
@@ -84,7 +84,7 @@
 
   <body>
     <div id="header">
-      <h1>Do people around the world trust each other?</h1>
+      <h1>What group would you NOT like to have as a neighbor?</h1>
     </div>
 
     <div id="timeline">
@@ -101,74 +101,57 @@
         2010-2014
       </div>
     </div>
-    <h2>
-      Percantage of people who mentioned a specific group they would NOT like to
-      have as a neighbor.
-    </h2>
     <div id="chartContainer">
       <div id="yRadio">
         Y-axis: <br />
-        <input
-          type="radio"
-          id="criminals"
-          checked
-          name="y"
-          onclick="changeY(0)"
-        />
-        <label for="criminals">People with a criminal record</label><br />
-        <input type="radio" id="race" name="y" onclick="changeY(1)" />
-        <label for="race">People of a different race</label><br />
-        <input type="radio" id="drinkers" name="y" onclick="changeY(2)" />
-        <label for="drinkers">Heavy drinkers</label><br />
-        <input type="radio" id="emotionals" name="y" onclick="changeY(3)" />
-        <label for="drinkers">Emotionally unstable people</label><br />
 
-        <input type="radio" id="immigrants" name="y" onclick="changeY(4)" />
+        <input type="radio" id="race" checked name="y" onclick="changeY(0)" />
+        <label for="race">People of a different race</label><br />
+        <input type="radio" id="religion" name="y" onclick="changeY(1)" />
+        <label for="religion">People of a different religion</label><br />
+        <input type="radio" id="drinkersY" name="y" onclick="changeY(2)" />
+        <label for="drinkers">Heavy drinkers</label><br />
+
+        <input type="radio" id="immigrants" name="y" onclick="changeY(3)" />
         <label for="immigrants">Immigrants/foreign workers</label><br />
-        <input type="radio" id="aids" name="y" onclick="changeY(5)" />
+        <input type="radio" id="aids" name="y" onclick="changeY(4)" />
         <label for="aids">People who have AIDS</label><br />
-        <input type="radio" id="addicts" name="y" onclick="changeY(6)" />
+        <input type="radio" id="addicts" name="y" onclick="changeY(5)" />
         <label for="addicts">Drug addicts</label><br />
-        <input type="radio" id="homo" name="y" onclick="changeY(7)" />
+        <input type="radio" id="homo" name="y" onclick="changeY(6)" />
         <label for="homo">Homosexuals</label><br />
-        <input type="radio" id="extremists" name="y" onclick="changeY(8)" />
-        <label for="extremists">Political Extremists</label><br />
       </div>
 
       <!-- Create a div where the graph will take place -->
       <div id="chart"></div>
       <div id="xRadio">
         X-axis: <br />
-        <input
-          type="radio"
-          id="criminals"
-          checked
-          name="x"
-          onclick="changeX(0)"
-        />
-        <label for="criminals">People with a criminal record</label><br />
-        <input type="radio" id="race" name="x" onclick="changeX(1)" />
+        <input type="radio" id="race" checked name="x" onclick="changeX(0)" />
         <label for="race">People of a different race</label><br />
-        <input type="radio" id="drinkers" name="x" onclick="changeX(2)" />
+        <input type="radio" id="religion" name="x" onclick="changeX(1)" />
+        <label for="religion">People of a different religion</label><br />
+
+        <input type="radio" id="drinkersX" name="x" onclick="changeX(2)" />
         <label for="drinkers">Heavy drinkers</label><br />
-        <input type="radio" id="emotionals" name="x" onclick="changeX(3)" />
-        <label for="drinkers">Emotionally unstable people</label><br />
-        <input type="radio" id="immigrants" name="x" onclick="changeX(4)" />
+        <input type="radio" id="immigrants" name="x" onclick="changeX(3)" />
         <label for="immigrants">Immigrants/foreign workers</label><br />
-        <input type="radio" id="aids" name="x" onclick="changeX(5)" />
+        <input type="radio" id="aids" name="x" onclick="changeX(4)" />
         <label for="aids">People who have AIDS</label><br />
-        <input type="radio" id="addicts" name="x" onclick="changeX(6)" />
+        <input type="radio" id="addicts" name="x" onclick="changeX(5)" />
         <label for="addicts">Drug addicts</label><br />
-        <input type="radio" id="homo" name="x" onclick="changeX(7)" />
+        <input type="radio" id="homo" name="x" onclick="changeX(6)" />
         <label for="homo">Homosexuals</label><br />
-        <input type="radio" id="extremists" name="x" onclick="changeX(8)" />
-        <label for="extremists">Political Extremists</label><br />
       </div>
     </div>
 
     <script>
       let dataFile = "data95-99.csv";
-      let dataFiles = ["data95-99.csv", "", "", ""];
+      let dataFiles = [
+        "data95-99.csv",
+        "data99-04.csv",
+        "data05-09.csv",
+        "data10-04.csv"
+      ];
       function changeData(id, year) {
         let markers = document.getElementsByClassName("marker");
         for (i = 0; i < markers.length; i++) {
@@ -178,7 +161,15 @@
         document.getElementById(id).style.opacity = "1";
         document.getElementById(id).style.border = "solid grey 1px";
         dataFile = dataFiles[year];
+        if (dataFile == dataFiles[1]) {
+          document.getElementById("drinkersX").disabled = true;
+          document.getElementById("drinkersY").disabled = true;
+        } else {
+          document.getElementById("drinkersX").disabled = false;
+          document.getElementById("drinkersY").disabled = false;
+        }
         intialData();
+        moveBubbles();
       }
 
       //scope 0-8
@@ -186,15 +177,13 @@
       let categoryY = 0;
       let getCategories = function(d, value) {
         let categories = [
-          d.criminals,
           d.race,
+          d.religion,
           d.drinkers,
-          d.emotional,
           d.immigrants,
           d.aids,
           d.addicts,
-          d.homo,
-          d.extremists
+          d.homo
         ];
         return categories[value];
       };
@@ -241,7 +230,7 @@
       var z = d3
         .scaleLinear()
         .domain([0, 100])
-        .range([5, 60]);
+        .range([5, 75]);
 
       // Add a scale for bubble color
       var myColor = d3
@@ -264,7 +253,7 @@
               .style("opacity", 0)
               .style("position", "relative")
               .style("z-index", 1)
-              .style("width", "120px")
+              .style("width", "160px")
               .attr("class", "tooltip")
               .style("background-color", "black")
               .style("border-radius", "5px")
@@ -281,10 +270,10 @@
                 .html(
                   "Country: " +
                     d.country +
-                    "<br/><br/>Overall trust: " +
+                    "<br/>Most people can be trusted: " +
                     d.trust +
                     "%" +
-                    "<br/>X-value: " +
+                    "<br/><br/>X-value: " +
                     x +
                     "%" +
                     "<br/>Y-value: " +
@@ -339,6 +328,7 @@
           });
         }
       }
+
       function moveBubbles() {
         d3.csv(dataFile, function(error, data) {
           if (error) throw error;
@@ -351,7 +341,16 @@
             })
             .attr("cy", function(d) {
               let valueY = getCategories(d, categoryY);
+              let valueX = getCategories(d, categoryX);
+              if (valueX == "" || valueY == "") {
+                return y(-150);
+              } else {
+                return y(valueY);
+              }
               return y(valueY);
+            })
+            .attr("r", function(d) {
+              return z(d.trust);
             });
         });
       }
