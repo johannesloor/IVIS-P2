@@ -12,38 +12,48 @@
     <!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
     <style>
       body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
         font: 10px sans-serif;
-        /*text-align: center;*/
+        background-color: #fcf5c7;
       }
-      #info {
+      #header {
+        width: 100%;
         text-align: center;
-        top: 20px;
-        font-size: 30px;
+        font-size: 14pt;
+        background-color: #79addc;
+        color: white;
+        margin-bottom: 20px;
       }
+
       #chartContainer {
         display: flex;
         flex-direction: row;
       }
+
       #yRadio {
-        display: inline-block;
+        height: 100%;
+        font-size: 10pt;
       }
       #xRadio {
-        display: block;
         position: relative;
         top: 230px;
+        font-size: 10pt;
+        height: 100%;
       }
 
       #timeline {
         display: flex;
         flex-direction: row;
         position: relative;
-        left: 200px;
       }
       .marker {
         margin: 10px;
         padding: 10px;
-        font-size: 17pt;
-        background-color: #e27d60;
+        font-size: 15pt;
+        background-color: #79addc;
         border-radius: 5%;
         color: white;
         opacity: 0.6;
@@ -64,7 +74,10 @@
   </head>
 
   <body>
-    <h1 id="info">Do you trust me?</h1>
+    <div id="header">
+      <h1>Do people around the world trust each other?</h1>
+    </div>
+
     <div id="timeline">
       <div class="marker" id="marker1" onclick="changeData(id, 0)">
         1990-1994
@@ -79,8 +92,13 @@
         2005-2009
       </div>
     </div>
+    <h2>
+      Percantage of people who mentioned a specific group they would NOT like to
+      have as a neighbor.
+    </h2>
     <div id="chartContainer">
       <div id="yRadio">
+        Y-axis: <br />
         <input
           type="radio"
           id="criminals"
@@ -88,32 +106,30 @@
           name="y"
           onclick="changeY(0)"
         />
-        <label for="criminals">Criminals</label><br />
+        <label for="criminals">People with a criminal record</label><br />
         <input type="radio" id="race" name="y" onclick="changeY(1)" />
-        <label for="race">Race</label><br />
+        <label for="race">People of a different race</label><br />
         <input type="radio" id="drinkers" name="y" onclick="changeY(2)" />
-        <label for="drinkers">Drinkers</label><br />
-        <input
-          type="radio"
-          id="emotionals"
-          name="y"
-          onclick="changeY(3)"
-        /><label for="emotionals">Emotionals</label><br />
+        <label for="drinkers">Heavy drinkers</label><br />
+        <input type="radio" id="emotionals" name="y" onclick="changeY(3)" />
+        <label for="drinkers">Emotionally unstable people</label><br />
+
         <input type="radio" id="immigrants" name="y" onclick="changeY(4)" />
-        <label for="immigrants">Immigrants</label><br />
+        <label for="immigrants">Immigrants/foreign workers</label><br />
         <input type="radio" id="aids" name="y" onclick="changeY(5)" />
-        <label for="aids">AIDS</label><br />
+        <label for="aids">People who have AIDS</label><br />
         <input type="radio" id="addicts" name="y" onclick="changeY(6)" />
-        <label for="addicts">addicts</label><br />
+        <label for="addicts">Drug addicts</label><br />
         <input type="radio" id="homo" name="y" onclick="changeY(7)" />
-        <label for="homo">homosexuals</label><br />
+        <label for="homo">Homosexuals</label><br />
         <input type="radio" id="extremists" name="y" onclick="changeY(8)" />
-        <label for="extremists">extremists</label><br />
+        <label for="extremists">Political Extremists</label><br />
       </div>
 
       <!-- Create a div where the graph will take place -->
       <div id="chart"></div>
       <div id="xRadio">
+        X-axis: <br />
         <input
           type="radio"
           id="criminals"
@@ -121,31 +137,39 @@
           name="x"
           onclick="changeX(0)"
         />
-        <label for="criminals">Criminals</label><br />
+        <label for="criminals">People with a criminal record</label><br />
         <input type="radio" id="race" name="x" onclick="changeX(1)" />
-        <label for="race">Race</label><br />
+        <label for="race">People of a different race</label><br />
         <input type="radio" id="drinkers" name="x" onclick="changeX(2)" />
-        <label for="drinkers">Drinkers</label><br />
-        <input
-          type="radio"
-          id="emotionals"
-          name="x"
-          onclick="changeX(3)"
-        /><label for="emotionals">Emotionals</label><br />
+        <label for="drinkers">Heavy drinkers</label><br />
+        <input type="radio" id="emotionals" name="x" onclick="changeX(3)" />
+        <label for="drinkers">Emotionally unstable people</label><br />
         <input type="radio" id="immigrants" name="x" onclick="changeX(4)" />
-        <label for="immigrants">Immigrants</label><br />
+        <label for="immigrants">Immigrants/foreign workers</label><br />
         <input type="radio" id="aids" name="x" onclick="changeX(5)" />
-        <label for="aids">AIDS</label><br />
+        <label for="aids">People who have AIDS</label><br />
         <input type="radio" id="addicts" name="x" onclick="changeX(6)" />
-        <label for="addicts">addicts</label><br />
+        <label for="addicts">Drug addicts</label><br />
         <input type="radio" id="homo" name="x" onclick="changeX(7)" />
-        <label for="homo">homosexuals</label><br />
+        <label for="homo">Homosexuals</label><br />
         <input type="radio" id="extremists" name="x" onclick="changeX(8)" />
-        <label for="extremists">extremists</label><br />
+        <label for="extremists">Political Extremists</label><br />
       </div>
     </div>
 
     <script>
+      let dataFile = "data95-99.csv";
+      let dataFiles = ["", "data95-99.csv", "", ""];
+      function changeData(id, year) {
+        let markers = document.getElementsByClassName("marker");
+        for (i = 0; i < markers.length; i++) {
+          markers[i].style.opacity = "0.5";
+        }
+        document.getElementById(id).style.opacity = "1";
+        dataFile = dataFiles[year];
+        intialData();
+      }
+
       //scope 0-8
       let categoryX = 0;
       let categoryY = 0;
@@ -165,27 +189,16 @@
       };
       function changeX(value) {
         categoryX = value;
-        updateData();
+        moveBubbles();
       }
       function changeY(value) {
         categoryY = value;
-        updateData();
-      }
-      let dataFile = "data95-99.csv";
-      let dataFiles = ["", "data95-99.csv", "", ""];
-      function changeData(id, year) {
-        let markers = document.getElementsByClassName("marker");
-        for (i = 0; i < markers.length; i++) {
-          markers[i].style.opacity = "0.6";
-        }
-        document.getElementById(id).style.opacity = "1";
-        dataFile = dataFiles[year];
-        updateData();
+        moveBubbles();
       }
 
       // set the dimensions and margins of the graph
       var margin = { top: 10, right: 20, bottom: 30, left: 50 },
-        width = 800 - margin.left - margin.right,
+        width = 700 - margin.left - margin.right,
         height = 420 - margin.top - margin.bottom;
 
       // append the svg object to the body of the page
@@ -217,89 +230,112 @@
       var z = d3
         .scaleLinear()
         .domain([0, 100])
-        .range([5, 50]);
+        .range([5, 60]);
 
       // Add a scale for bubble color
       var myColor = d3
         .scaleOrdinal()
         .domain(["Asia", "Europe", "Americas", "Africa", "Oceania"])
         .range(d3.schemeSet2);
-
-      function updateData() {
+      function intialData() {
         d3.selectAll("circle").remove();
         d3.selectAll(".tooltip").remove();
+        if (dataFile == "") {
+          return;
+        } else {
+          d3.csv(dataFile, function(error, data) {
+            if (error) throw error;
+
+            // -1- Create a tooltip div that is hidden by default:
+            var tooltip = d3
+              .select("#chart")
+              .append("div")
+              .style("opacity", 0)
+              .style("position", "relative")
+              .style("z-index", 1)
+              .style("width", "120px")
+              .attr("class", "tooltip")
+              .style("background-color", "black")
+              .style("border-radius", "5px")
+              .style("padding", "10px")
+              .style("color", "white");
+
+            // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
+            var showTooltip = function(d) {
+              tooltip.transition().duration(200);
+              tooltip
+                .style("opacity", 1)
+                .html(
+                  "Country: " +
+                    d.country +
+                    "<br/>Overall trust: " +
+                    d.trust +
+                    "%"
+                )
+                .style("left", d3.mouse(this)[0] + 50 + "px")
+                .style("top", d3.mouse(this)[1] - 400 + "px");
+            };
+            var moveTooltip = function(d) {
+              tooltip
+                .style("left", d3.mouse(this)[0] + 50 + "px")
+                .style("top", d3.mouse(this)[1] - 400 + "px");
+            };
+            var hideTooltip = function(d) {
+              tooltip
+                .transition()
+                .duration(200)
+                .style("opacity", 0);
+            };
+
+            // Add dots
+            svg
+              .append("g")
+              .selectAll("dot")
+              .data(data)
+              .enter()
+              .append("circle")
+              .attr("class", "bubbles")
+              .style("opacity", 0.7)
+              .style("transition", "left 2s")
+              .attr("cx", function(d) {
+                let valueX = getCategories(d, categoryX);
+                return x(valueX);
+
+                //return x(valueX);
+              })
+              .attr("cy", function(d) {
+                let valueY = getCategories(d, categoryY);
+                return y(valueY);
+              })
+              .attr("r", function(d) {
+                return z(d.trust);
+              })
+              .style("fill", function(d) {
+                return myColor(d.continent);
+              })
+              // -3- Trigger the functions
+              .on("mouseover", showTooltip)
+              .on("mousemove", moveTooltip)
+              .on("mouseleave", hideTooltip);
+          });
+        }
+      }
+      function moveBubbles() {
         d3.csv(dataFile, function(error, data) {
           if (error) throw error;
-
-          // -1- Create a tooltip div that is hidden by default:
-          var tooltip = d3
-            .select("#chart")
-            .append("div")
-            .style("opacity", 0)
-            .style("position", "relative")
-            .style("z-index", 1)
-            .style("width", "120px")
-            .attr("class", "tooltip")
-            .style("background-color", "black")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
-            .style("color", "white");
-
-          // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
-          var showTooltip = function(d) {
-            tooltip.transition().duration(200);
-            tooltip
-              .style("opacity", 1)
-              .html(
-                "Country: " + d.country + "<br/>Overall trust: " + d.trust + "%"
-              )
-              .style("left", d3.mouse(this)[0] + 50 + "px")
-              .style("top", d3.mouse(this)[1] - 400 + "px");
-          };
-          var moveTooltip = function(d) {
-            tooltip
-              .style("left", d3.mouse(this)[0] + 50 + "px")
-              .style("top", d3.mouse(this)[1] - 400 + "px");
-          };
-          var hideTooltip = function(d) {
-            tooltip
-              .transition()
-              .duration(200)
-              .style("opacity", 0);
-          };
-
-          // Add dots
-          svg
-            .append("g")
-            .selectAll("dot")
-            .data(data)
-            .enter()
-            .append("circle")
-            .attr("class", "bubbles")
-            .style("opacity", 0.7)
+          d3.selectAll("circle")
+            .transition()
             .attr("cx", function(d) {
               let valueX = getCategories(d, categoryX);
               return x(valueX);
-
-              //return x(valueX);
             })
             .attr("cy", function(d) {
               let valueY = getCategories(d, categoryY);
               return y(valueY);
-            })
-            .attr("r", function(d) {
-              return z(d.trust);
-            })
-            .style("fill", function(d) {
-              return myColor(d.continent);
-            })
-            // -3- Trigger the functions
-            .on("mouseover", showTooltip)
-            .on("mousemove", moveTooltip)
-            .on("mouseleave", hideTooltip);
+            });
         });
       }
-      updateData();
+      intialData();
     </script>
   </body>
 </html>
