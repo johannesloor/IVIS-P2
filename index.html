@@ -38,6 +38,13 @@
         opacity: 1;
         margin-left: 5%;
       }
+      #page2 {
+        display: none;
+        font-size: 16pt;
+        width: 60%;
+        padding-top: 20px;
+        padding-bottom: 30px;
+      }
 
       #header {
         display: flex;
@@ -210,16 +217,66 @@
         </div>
       </div>
     </div>
-    <div class="page" id="page2">hej</div>
+    <div class="page" id="page2">
+      <h2>World Values Survey</h2>
+      The main research question I wanted to engage in and build a tool for
+      was:<br /><br />
+      How does trust among people differ around the world and does this
+      correlate to who we want as neighbors? <br /><br />Looking at the World
+      Values Survey website this could be somewhat explored with both graphs and
+      tables like the ones below.<br /><br />
+      <image src="addicts.png" style="width:70%;height:70%;"></image>
+      <br />
+      <image src="trust1.png" style="width:70%;height:70%;"></image>
+      <br />
+      <image src="trust2.png" style="width:70%;height:70%;"></image>
+      <br />
+      Through these you can see how people responded to the question ”Can most
+      people be trusted?” And what groups they mentioned as someone they not
+      wanted to be neighbors with. It is however hard to compare countries, at
+      least when you compare a larger quantity, and to compare different
+      questions to each other is really cumbersome. <br /><br />This lead me to
+      build a visualization where one can get a quick overview of 8 different
+      variables over 20 years. The first is the overall trust in different
+      countries (the bubble size) and the other seven are potential neighbors
+      people have mentioned that they would not like to have. I chose to use
+      only the "Mentioned" data, see picture one, as I believed this to make the
+      overview clearer without harming the readability. Many more groups of
+      people would have been added if the data had not been incomplete for these
+      groups and years.
+      <h2>Gapminder</h2>
+      The Gapminder visualization is truly more engaging than the WVS website
+      and has many great ways of visualizing data. Two of these which I really
+      like are bubbles and maps:<br /><br />
+      <image src="bubbles.png" style="width:70%;height:70%;"></image><br />
+      <image src="maps.png" style="width:70%;height:70%;"></image>
+      <br />
+      In the bubbles visualization, one can choose what the axis and bubble
+      sizes represent from vast amounts of data. This was a great inspiration to
+      me when building my tool. The maps one is great for focusing on one
+      question and seeing how the answer varies through out the world. There is
+      a lot of useful data that could have been applied to my own tool. Factors
+      like literacy rate, income and education level would for example be
+      interesting to compare with the trust data given from WVS. Unfortunatly, I
+      did not have time to combine the data from gapminder with my
+      visualization.
+      <h2>Learnings</h2>
+      I have gained a greater understanding about D3.js and how to make bubble
+      charts. I also learned that working with lots of data can be tiresome,
+      especially if you need to modulate it to get it to work. To understand and
+      choose the data took way longer then I initially thought it would. It has
+      been a fun project overall but as always I need to learn when to focus on
+      big picture stuff and not get stuck on small design elements.
+    </div>
     <script>
       function changePage(id) {
         if (id == "pagebtn1") {
           document.getElementById("page2").style.display = "none";
-          document.getElementById("page1").style.display = "";
+          document.getElementById("page1").style.display = "flex";
           document.getElementById("pagebtn2").style.opacity = "0.6";
         } else {
           document.getElementById("page1").style.display = "none";
-          document.getElementById("page2").style.display = "";
+          document.getElementById("page2").style.display = "flex";
           document.getElementById("pagebtn1").style.opacity = "0.6";
         }
         document.getElementById(id).style.opacity = "1";
